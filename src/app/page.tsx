@@ -9,7 +9,8 @@ import SkeletonLoader from '@/components/skeleton-loader';
 import ErrorCard from '@/components/error-card';
 import UserForm from '@/components/user-form';
 import { useLocalUsers } from '@/hooks/use-local-users';
-import { User } from '@/types/user'; // Импорт типа User
+import { User } from '@/types/user';
+import { UserFormValues } from '@/types/user';
 
 export default function HomePage() {
   const { users, loading, error, addUser, deleteUser } = useLocalUsers();
@@ -17,12 +18,22 @@ export default function HomePage() {
 
   if (error) return <ErrorCard message={error} />;
 
-  const handleAddUser = (userData: Omit<User, 'id'>) => {
+  const handleAddUser = (formData: UserFormValues) => {
     const newUser: User = {
-      ...userData,
-      id: generateNewUserId(users), // Функция генерации нового ID
-      address: userData.address || { street: '', suite: '', city: '', zipcode: '' },
-      company: userData.company || { name: '', catchPhrase: '', bs: '' }
+      ...formData,
+      id: generateNewUserId(users),
+      // Убедимся, что все обязательные поля адреса и компании передаются
+      address: {
+        street: formData.address.street,
+        suite: formData.address.suite,
+        city: formData.address.city,
+        zipcode: formData.address.zipcode,
+      },
+      company: {
+        name: formData.company.name,
+        catchPhrase: formData.company.catchPhrase || '',
+        bs: formData.company.bs || '',
+      }
     };
     addUser(newUser);
     setShowModal(false);
@@ -69,7 +80,6 @@ export default function HomePage() {
   );
 }
 
-// Вспомогательная функция для генерации ID
 function generateNewUserId(users: User[]): number {
   return users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { notFound, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/shadcn-components/button';
@@ -12,41 +12,48 @@ import { User } from '@/types/user';
 
 export default function UserDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const { users, updateUser } = useLocalUsers();
+  const { users, updateUser } = useLocalUsers(); // Теперь updateUser доступен
   const id = parseInt(params.id);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const loadUser = useCallback(async () => {
-    try {
-      setLoading(true);
-      const localUser = users.find(user => user.id === id);
-
-      if (localUser) {
-        setUser(localUser);
-      } else {
-        const apiUser = await fetchUser(id);
-        setUser(apiUser);
-      }
-
-      if (!localUser && !user) {
-        notFound();
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load user');
-    } finally {
-      setLoading(false);
-    }
-  }, [id, users, user]); // Добавляем user в зависимости
-
   useEffect(() => {
+    const loadUser = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const localUser = users.find(user => user.id === id);
+
+        if (localUser) {
+          setUser(localUser);
+        } else {
+          const apiUser = await fetchUser(id);
+          setUser(apiUser);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load user');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadUser();
-  }, [loadUser]); // Используем мемоизированную функцию
+  }, [id, users]);
 
   const handleBack = () => {
     router.back();
+  };
+
+  const handleUpdateUser = (updatedData: Partial<User>) => {
+    if (!user) return;
+
+    // Обновляем и в локальном состоянии, и в глобальном хранилище
+    updateUser(user.id, updatedData);
+    setUser(prev => prev ? { ...prev, ...updatedData } : null);
+    setIsFormOpen(false);
   };
 
   if (loading) {
@@ -78,35 +85,58 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
       className="container mx-auto p-4"
     >
       <div className="max-w-2xl mx-auto">
-        <Button variant="outline" className="mb-6" onClick={handleBack}>
-          Back
-        </Button>
+        <div className="flex justify-between items-start mb-6">
+          <Button variant="outline" onClick={handleBack}>
+            Back
+          </Button>
+          <Button onClick={() => setIsFormOpen(true)}>
+            Edit User
+          </Button>
+        </div>
 
         <div className="space-y-4">
           <h1 className="text-2xl font-bold">{user.name}</h1>
-          <p>Username: {user.username}</p>
-          <p>Email: {user.email}</p>
-          <p>Phone: {user.phone}</p>
-          <p>Website: {user.website}</p>
-          <p>Company: {user.company.name}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p className="font-medium">Username:</p>
+              <p>{user.username}</p>
+            </div>
+            <div>
+              <p className="font-medium">Email:</p>
+              <p>{user.email}</p>
+            </div>
+            <div>
+              <p className="font-medium">Phone:</p>
+              <p>{user.phone}</p>
+            </div>
+            <div>
+              <p className="font-medium">Website:</p>
+              <p>{user.website || '-'}</p>
+            </div>
+          </div>
 
-          <div className="mt-4">
-            <h2 className="text-xl font-semibold">Address</h2>
+          <div className="mt-6">
+            <h2 className="text-xl font-semibold mb-2">Company</h2>
+            <p>{user.company.name}</p>
+            {user.company.catchPhrase && (
+              <p className="text-muted-foreground">{user.company.catchPhrase}</p>
+            )}
+          </div>
+
+          <div className="mt-6">
+            <h2 className="text-xl font-semibold mb-2">Address</h2>
             <p>{user.address.street}, {user.address.suite}</p>
             <p>{user.address.city}, {user.address.zipcode}</p>
           </div>
-
-          <UserForm
-            user={user}
-            open={isFormOpen}
-            onOpenChange={setIsFormOpen}
-            onSubmit={(data) => {
-              updateUser(user.id, data);
-              setIsFormOpen(false); // Закрываем форму после сохранения
-            }}
-            buttonText="Save Changes"
-          />
         </div>
+
+        <UserForm
+          user={user}
+          open={isFormOpen}
+          onOpenChange={setIsFormOpen}
+          onSubmit={handleUpdateUser}
+          buttonText="Save Changes"
+        />
       </div>
     </motion.div>
   );
