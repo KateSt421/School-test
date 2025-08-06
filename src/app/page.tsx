@@ -22,18 +22,8 @@ export default function HomePage() {
     const newUser: User = {
       ...formData,
       id: generateNewUserId(users),
-      // Убедимся, что все обязательные поля адреса и компании передаются
-      address: {
-        street: formData.address.street,
-        suite: formData.address.suite,
-        city: formData.address.city,
-        zipcode: formData.address.zipcode,
-      },
-      company: {
-        name: formData.company.name,
-        catchPhrase: formData.company.catchPhrase || '',
-        bs: formData.company.bs || '',
-      }
+      address: formData.address,
+      company: formData.company
     };
     addUser(newUser);
     setShowModal(false);
