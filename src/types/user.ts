@@ -1,18 +1,14 @@
-interface Address {
+export interface Address {
   street: string;
   suite: string;
   city: string;
   zipcode: string;
-  geo?: {
-    lat: string;
-    lng: string;
-  };
 }
 
-interface Company {
+export interface Company {
   name: string;
-  catchPhrase: string;
-  bs: string;
+  catchPhrase?: string;
+  bs?: string;
 }
 
 export interface User {
@@ -22,8 +18,17 @@ export interface User {
   email: string;
   address: Address;
   phone: string;
-  website: string;
+  website?: string;
   company: Company;
 }
 
-export type UserFormData = Omit<User, 'id'> & { id?: number };
+export type UserFormValues = {
+  id?: number;
+  name: string;
+  username: string;
+  email: string;
+  phone: string;
+  website?: string;
+  address: Address;
+  company: Company;
+};
