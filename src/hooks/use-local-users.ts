@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { User } from '@/types/user';
 import { fetchUsers } from '@/lib/api';
 
@@ -22,6 +22,11 @@ export function useLocalUsers() {
     loadUsers();
   }, []);
 
+  const getLocalUser = useCallback((id: number) => {
+    console.log(users.map(u => ({ id: u.id, type: typeof u.id })));
+    return users.find(user => user.id === id);
+  }, [users]);
+
   const addUser = (user: User) => {
     setUsers(prev => [...prev, user]);
   };
@@ -42,6 +47,7 @@ export function useLocalUsers() {
     users,
     loading,
     error,
+    getLocalUser,
     addUser,
     updateUser,
     deleteUser,

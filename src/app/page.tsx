@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/shadcn-components/button';
 import UserCard from '@/components/user-card';
@@ -9,14 +9,17 @@ import SkeletonLoader from '@/components/skeleton-loader';
 import ErrorCard from '@/components/error-card';
 import UserForm from '@/components/user-form';
 import { useLocalUsers } from '@/hooks/use-local-users';
-import { User } from '@/types/user';
-import { UserFormValues } from '@/types/user';
+import { User, UserFormValues } from '@/types/user';
 
 export default function HomePage() {
   const { users, loading, error, addUser, deleteUser } = useLocalUsers();
   const [showModal, setShowModal] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
 
-  if (error) return <ErrorCard message={error} />;
+  // Инициализация отфильтрованных пользователей
+  useEffect(() => {
+    setFilteredUsers(users);
+  }, [users]);
 
   const handleAddUser = (formData: UserFormValues) => {
     const newUser: User = {
@@ -29,6 +32,8 @@ export default function HomePage() {
     setShowModal(false);
   };
 
+  if (error) return <ErrorCard message={error} />;
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -39,7 +44,7 @@ export default function HomePage() {
       <h1 className="text-3xl font-bold mb-6 text-gray-800">User Management</h1>
 
       <div className="flex flex-col md:flex-row gap-4 mb-6 items-start md:items-center">
-        <SearchFilter />
+        <SearchFilter onFilterChange={setFilteredUsers} />
         <Button
           onClick={() => setShowModal(true)}
           className="bg-blue-600 hover:bg-blue-700 text-white"
@@ -47,12 +52,13 @@ export default function HomePage() {
           Add User
         </Button>
       </div>
+
       <Suspense fallback={<SkeletonLoader count={5} />}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {loading ? (
             <SkeletonLoader count={5} />
           ) : (
-            users.map(user => (
+            filteredUsers.map(user => (
               <UserCard
                 key={user.id}
                 user={user}

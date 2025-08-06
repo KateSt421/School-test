@@ -19,9 +19,15 @@ export default function UserCard({ user, onDelete }: UserCardProps) {
         <p className="text-sm text-gray-700 font-medium">{user.company.name}</p>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button variant="outline" className="bg-blue-50 text-blue-600 hover:bg-blue-100 border-blue-200" asChild>
-          <Link href={`/user/${user.id}`}>Details</Link>
-        </Button>
+        <Link href={`/user/${user.id}`} passHref>
+          <Button
+            variant="outline"
+            className="bg-blue-50 text-blue-600 hover:bg-blue-100 border-blue-200"
+            asChild
+          >
+            <span>Details</span>
+          </Button>
+        </Link>
         <Button
           variant="destructive"
           className="bg-red-50 text-red-600 hover:bg-red-100 border-red-200"
