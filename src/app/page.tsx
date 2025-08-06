@@ -34,17 +34,19 @@ export default function HomePage() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="container mx-auto p-4"
+      className="container mx-auto px-4 py-6 max-w-7xl"
     >
-      <h1 className="text-3xl font-bold mb-6">User Management</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">User Management</h1>
 
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
+      <div className="flex flex-col md:flex-row gap-4 mb-6 items-start md:items-center">
         <SearchFilter />
-        <Button onClick={() => setShowModal(true)}>
+        <Button
+          onClick={() => setShowModal(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white"
+        >
           Add User
         </Button>
       </div>
-
       <Suspense fallback={<SkeletonLoader count={5} />}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {loading ? (

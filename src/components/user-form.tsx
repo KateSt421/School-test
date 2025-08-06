@@ -78,11 +78,12 @@ export default function UserForm({
       if (!open) form.reset();
       onOpenChange(open);
     }}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] bg-white rounded-lg">
         <DialogHeader>
-          <DialogTitle>{user ? 'Edit User' : 'Add New User'}</DialogTitle>
+          <DialogTitle className="text-gray-800 text-xl font-semibold">
+            {user ? 'Edit User' : 'Add New User'}
+          </DialogTitle>
         </DialogHeader>
-
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -91,9 +92,9 @@ export default function UserForm({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel className="text-gray-700">Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Full name" {...field} />
+                    <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Full name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -105,9 +106,9 @@ export default function UserForm({
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel className="text-gray-700">Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Username" {...field} />
+                    <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Username" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -119,9 +120,9 @@ export default function UserForm({
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel className="text-gray-700">Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Email" type="email" {...field} />
+                    <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Email" type="email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -133,9 +134,9 @@ export default function UserForm({
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone</FormLabel>
+                  <FormLabel className="text-gray-700">Phone</FormLabel>
                   <FormControl>
-                    <Input placeholder="Phone number" {...field} />
+                    <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Phone number" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -147,9 +148,9 @@ export default function UserForm({
               name="website"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Website</FormLabel>
+                  <FormLabel className="text-gray-700">Website</FormLabel>
                   <FormControl>
-                    <Input placeholder="Website URL" {...field} />
+                    <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Website URL" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -162,9 +163,9 @@ export default function UserForm({
                 name="company.name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Company Name</FormLabel>
+                    <FormLabel className="text-gray-700">Company Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Company name" {...field} />
+                      <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Company name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -176,9 +177,9 @@ export default function UserForm({
                 name="company.catchPhrase"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Catch Phrase</FormLabel>
+                    <FormLabel className="text-gray-700">Catch Phrase</FormLabel>
                     <FormControl>
-                      <Input placeholder="Company slogan" {...field} />
+                      <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Company slogan" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -192,9 +193,9 @@ export default function UserForm({
                 name="address.street"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Street</FormLabel>
+                    <FormLabel className="text-gray-700">Street</FormLabel>
                     <FormControl>
-                      <Input placeholder="Street" {...field} />
+                      <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Street" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -205,9 +206,9 @@ export default function UserForm({
                 name="address.suite"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Suite</FormLabel>
+                    <FormLabel className="text-gray-700">Suite</FormLabel>
                     <FormControl>
-                      <Input placeholder="Suite" {...field} />
+                      <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Suite" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -218,9 +219,9 @@ export default function UserForm({
                 name="address.city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>City</FormLabel>
+                    <FormLabel className="text-gray-700">City</FormLabel>
                     <FormControl>
-                      <Input placeholder="City" {...field} />
+                      <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="City" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -231,19 +232,20 @@ export default function UserForm({
                 name="address.zipcode"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Zipcode</FormLabel>
+                    <FormLabel className="text-gray-700">Zipcode</FormLabel>
                     <FormControl>
-                      <Input placeholder="Zipcode" {...field} />
+                      <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Zipcode" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            <div className="flex justify-end gap-2">
+            <div className="flex justify-end gap-2 pt-4">
               <Button
                 type="button"
                 variant="outline"
+                className="border-gray-300 text-gray-700 hover:bg-gray-50"
                 onClick={() => {
                   form.reset();
                   onOpenChange(false);
@@ -251,7 +253,10 @@ export default function UserForm({
               >
                 Cancel
               </Button>
-              <Button type="submit">
+              <Button
+                type="submit"
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
                 {buttonText}
               </Button>
             </div>

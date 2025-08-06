@@ -25,22 +25,23 @@ export default function SearchFilter() {
         placeholder="Search by name..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="flex-1"
+        className="flex-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
       />
 
       <Select
         value={companyFilter}
         onValueChange={setCompanyFilter}
       >
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-[180px] border-gray-300 focus:border-blue-500 focus:ring-blue-500">
           <SelectValue placeholder="Filter by company" />
         </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">All Companies</SelectItem> {/* Используем 'all' вместо '' */}
+        <SelectContent className="bg-white border-gray-300">
+          <SelectItem value="all">All Companies</SelectItem>
           {companies.map(company => (
             <SelectItem
               key={company}
-              value={company} // Убедитесь, что значение не пустое
+              value={company}
+              className="hover:bg-blue-50 focus:bg-blue-50"
             >
               {company}
             </SelectItem>
