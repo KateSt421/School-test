@@ -3,12 +3,12 @@
 import { Suspense, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/shadcn-components/button';
-import UserCard from '@/components/user-card';
-import SearchFilter from '@/components/search-filter';
-import SkeletonLoader from '@/components/skeleton-loader';
-import ErrorCard from '@/components/error-card';
-import UserForm from '@/components/user-form';
-import { useLocalUsers } from '@/hooks/use-local-users';
+import UserCard from '@/components/user/UserCard';
+import SearchFilter from '@/components/SearchFilter';
+import SkeletonLoader from '@/components/SkeletonLoader';
+import ErrorCard from '@/components/ErrorCard';
+import UserForm from '@/components/user/UserForm';
+import { useLocalUsers } from '@/hooks/useLocalUsers';
 import { User, UserFormValues } from '@/types/user';
 
 export default function HomePage() {

@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/shadcn-components/select';
-import { useLocalUsers } from '@/hooks/use-local-users';
+import { useLocalUsers } from '@/hooks/useLocalUsers';
 import { User } from '@/types/user';
 
 interface SearchFilterProps {

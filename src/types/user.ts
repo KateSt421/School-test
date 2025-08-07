@@ -33,3 +33,4 @@ export interface UserFormValues {
     name: string;
   };
 }
+export type UserFormData = Omit<User, 'id'> & { id?: number };
