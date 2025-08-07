@@ -18,26 +18,23 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
   const [error, setError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
-  // Разворачиваем params с помощью use()
   const { id } = use(params);
 
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const userId = parseInt(id); // Используем развернутый id
+        const userId = parseInt(id);
         if (isNaN(userId)) {
           setError('Invalid user ID');
           return;
         }
 
-        // Проверяем локальных пользователей
         const localUser = users.find(u => u.id === userId);
         if (localUser) {
           setUser(localUser);
           return;
         }
 
-        // Загружаем из API если не найдено локально
         const apiUser = await fetchUser(userId);
         setUser(apiUser);
       } catch (err) {
@@ -48,7 +45,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
     };
 
     loadUser();
-  }, [id, users]); // Используем id в зависимостях
+  }, [id, users]);
 
   if (loading) {
     return (
@@ -114,7 +111,6 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
   );
 }
 
-// Подкомпоненты остаются без изменений
 function UserInfoSection({ user }: { user: User }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
