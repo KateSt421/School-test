@@ -22,13 +22,14 @@ export interface User {
   company: Company;
 }
 
-export type UserFormValues = {
+export interface UserFormValues {
   id?: number;
   name: string;
   username: string;
   email: string;
   phone: string;
   website?: string;
-  address: Address;
-  company: Company;
-};
+  company: {
+    name: string;
+  };
+}

@@ -25,8 +25,17 @@ export default function HomePage() {
     const newUser: User = {
       ...formData,
       id: generateNewUserId(users),
-      address: formData.address,
-      company: formData.company
+      address: {
+        street: '',
+        suite: '',
+        city: '',
+        zipcode: '',
+      },
+      company: {
+        ...formData.company,
+        catchPhrase: '',
+        bs: '',
+      },
     };
     addUser(newUser);
     setShowModal(false);

@@ -35,14 +35,6 @@ export default function UserForm({
       website: '',
       company: {
         name: '',
-        catchPhrase: '',
-        bs: '',
-      },
-      address: {
-        street: '',
-        suite: '',
-        city: '',
-        zipcode: '',
       },
     },
   });
@@ -50,8 +42,14 @@ export default function UserForm({
   useEffect(() => {
     if (open) {
       form.reset(user ? {
-        ...user,
-        website: user.website || ''
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        phone: user.phone,
+        website: user.website || '',
+        company: {
+          name: user.company.name,
+        }
       } : {
         name: '',
         username: '',
@@ -60,14 +58,6 @@ export default function UserForm({
         website: '',
         company: {
           name: '',
-          catchPhrase: '',
-          bs: '',
-        },
-        address: {
-          street: '',
-          suite: '',
-          city: '',
-          zipcode: '',
         },
       });
     }
@@ -87,61 +77,65 @@ export default function UserForm({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700">Name</FormLabel>
-                  <FormControl>
-                    <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Full name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700">Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Full name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700">Username</FormLabel>
-                  <FormControl>
-                    <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Username" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700">Username</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Username" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700">Email</FormLabel>
-                  <FormControl>
-                    <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Email" type="email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700">Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Email" type="email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700">Phone</FormLabel>
-                  <FormControl>
-                    <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Phone number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700">Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Phone number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}
@@ -150,14 +144,15 @@ export default function UserForm({
                 <FormItem>
                   <FormLabel className="text-gray-700">Website</FormLabel>
                   <FormControl>
-                    <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Website URL" {...field} />
+                    <Input placeholder="Website URL" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="border-t pt-4">
+              <h3 className="text-lg font-medium mb-4">Company Information</h3>
               <FormField
                 control={form.control}
                 name="company.name"
@@ -165,87 +160,18 @@ export default function UserForm({
                   <FormItem>
                     <FormLabel className="text-gray-700">Company Name</FormLabel>
                     <FormControl>
-                      <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Company name" {...field} />
+                      <Input placeholder="Company name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+            </div>
 
-              <FormField
-                control={form.control}
-                name="company.catchPhrase"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-gray-700">Catch Phrase</FormLabel>
-                    <FormControl>
-                      <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Company slogan" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            {/* Добавляем поля для адреса */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="address.street"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-gray-700">Street</FormLabel>
-                    <FormControl>
-                      <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Street" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="address.suite"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-gray-700">Suite</FormLabel>
-                    <FormControl>
-                      <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Suite" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="address.city"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-gray-700">City</FormLabel>
-                    <FormControl>
-                      <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="City" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="address.zipcode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-gray-700">Zipcode</FormLabel>
-                    <FormControl>
-                      <Input className="border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="Zipcode" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
             <div className="flex justify-end gap-2 pt-4">
               <Button
                 type="button"
                 variant="outline"
-                className="border-gray-300 text-gray-700 hover:bg-gray-50"
                 onClick={() => {
                   form.reset();
                   onOpenChange(false);
