@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { SiteHeader } from '@/components/Header';
 import { SiteFooter } from '@/components/Footer';
+import { ScrollRestoration } from '@/components/ScrollRestoration';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <ScrollRestoration />
         <div className="flex min-h-screen flex-col">
           <SiteHeader />
           <main className="flex-1 container mx-auto px-4 py-4 max-w-7xl">

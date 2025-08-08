@@ -2,6 +2,7 @@
 
 import { Suspense, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/shadcn-components/button';
 import UserCard from '@/components/user/UserCard';
 import SearchFilter from '@/components/SearchFilter';
@@ -10,16 +11,28 @@ import ErrorCard from '@/components/ErrorCard';
 import UserForm from '@/components/user/UserForm';
 import { useLocalUsers } from '@/hooks/useLocalUsers';
 import { User, UserFormValues } from '@/types/user';
+import { applyUsersFilters } from '@/lib/utils';
 
 export default function HomePage() {
+  const searchParams = useSearchParams();
   const { users, loading, error, addUser, deleteUser } = useLocalUsers();
   const [showModal, setShowModal] = useState(false);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
 
-  // Инициализация отфильтрованных пользователей
+  // Инициализация фильтров из URL параметров
   useEffect(() => {
-    setFilteredUsers(users);
-  }, [users]);
+    if (users.length > 0) {
+      const searchTerm = searchParams.get('search') || '';
+      const companyName = searchParams.get('company') || '';
+
+      const filtered = applyUsersFilters(users, {
+        searchTerm,
+        companyName: companyName !== 'all' ? companyName : undefined
+      });
+
+      setFilteredUsers(filtered);
+    }
+  }, [users, searchParams]);
 
   const handleAddUser = (formData: UserFormValues) => {
     const newUser: User = {
