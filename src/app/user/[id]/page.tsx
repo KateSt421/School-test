@@ -1,3 +1,4 @@
+// app/user/[id]/page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -15,7 +16,7 @@ import CompanySection from '@/components/user/CompanySection';
 
 export default function UserDetailPage() {
   const router = useRouter();
-  const params = useParams(); // Правильный способ получения параметров
+  const params = useParams();
   const { users, updateUser } = useLocalUsers();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -25,19 +26,22 @@ export default function UserDetailPage() {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        // Получаем id из params
         const userId = parseInt(params.id as string);
         if (isNaN(userId)) {
           setError('Invalid user ID');
+          setLoading(false);
           return;
         }
 
+        // Сначала проверяем локальных пользователей
         const localUser = users.find(u => u.id === userId);
         if (localUser) {
           setUser(localUser);
+          setLoading(false);
           return;
         }
 
+        // Если пользователь не найден локально, пробуем загрузить с API
         const apiUser = await fetchUser(userId);
         setUser(apiUser);
       } catch (err) {
@@ -48,7 +52,7 @@ export default function UserDetailPage() {
     };
 
     loadUser();
-  }, [params.id, users]); // Используем params.id в зависимостях
+  }, [params.id, users]);
 
   const handleUpdate = (formData: UserFormValues) => {
     if (!user) return;

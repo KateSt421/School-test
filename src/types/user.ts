@@ -1,8 +1,9 @@
+// types/user.ts
 export interface Address {
-  street: string;
-  suite: string;
-  city: string;
-  zipcode: string;
+  street?: string;
+  suite?: string;
+  city?: string;
+  zipcode?: string;
 }
 
 export interface Company {
@@ -33,4 +34,5 @@ export interface UserFormValues {
     name: string;
   };
 }
+
 export type UserFormData = Omit<User, 'id'> & { id?: number };
