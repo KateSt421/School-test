@@ -9,7 +9,7 @@ import { useLocalUsers } from '@/hooks/useLocalUsers';
 import { User, UserFormValues } from '@/types/user';
 import { motion } from 'framer-motion';
 import ErrorCard from '@/components/ErrorCard';
-import SearchFilter from '@/components/SearchFilter';
+import SearchFilterClient from '@/components/SearchFilterClient';
 
 export default function HomePage() {
   const [showModal, setShowModal] = useState(false);
@@ -41,12 +41,10 @@ export default function HomePage() {
       <h1 className="text-3xl font-bold mb-6 text-gray-800">User Management</h1>
 
       <div className="flex flex-col md:flex-row gap-4 mb-6 items-start md:items-center">
-        <Suspense fallback={<div>Loading search...</div>}>
-          <SearchFilter
-            users={users}
-            onFilterChange={setFilteredUsers}
-          />
-        </Suspense>
+        <SearchFilterClient
+          users={users}
+          onFilterChange={setFilteredUsers}
+        />
         <Button
           onClick={() => setShowModal(true)}
           className="bg-blue-600 hover:bg-blue-700 text-white"

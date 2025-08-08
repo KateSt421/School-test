@@ -1,5 +1,7 @@
+// components/SearchFilter.tsx
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/shadcn-components/input';
 import {
@@ -10,21 +12,26 @@ import {
   SelectValue,
 } from '@/components/ui/shadcn-components/select';
 import { User } from '@/types/user';
-import { useState, useEffect } from 'react';
 
 interface SearchFilterProps {
   users: User[];
   onFilterChange: (filteredUsers: User[]) => void;
 }
 
-export default function SearchFilter({ users, onFilterChange }: SearchFilterProps) {
+export default function SearchFilter({
+  users,
+  onFilterChange
+}: SearchFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [search, setSearch] = useState(searchParams.get('search') || '');
-  const [companyFilter, setCompanyFilter] = useState(
-    searchParams.get('company') || 'all'
-  );
+  const [search, setSearch] = useState('');
+  const [companyFilter, setCompanyFilter] = useState('all');
+
+  useEffect(() => {
+    setSearch(searchParams.get('search') || '');
+    setCompanyFilter(searchParams.get('company') || 'all');
+  }, [searchParams]);
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
@@ -57,7 +64,11 @@ export default function SearchFilter({ users, onFilterChange }: SearchFilterProp
         onChange={(e) => setSearch(e.target.value)}
         className="flex-1"
       />
-      <Select value={companyFilter} onValueChange={setCompanyFilter}>
+
+      <Select
+        value={companyFilter}
+        onValueChange={setCompanyFilter}
+      >
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Filter by company" />
         </SelectTrigger>
