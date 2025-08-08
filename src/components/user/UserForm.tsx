@@ -40,8 +40,8 @@ export default function UserForm({
   });
 
   useEffect(() => {
-    if (open) {
-      form.reset(user ? {
+    if (open && user) {
+      form.reset({
         name: user.name,
         username: user.username,
         email: user.email,
@@ -50,7 +50,9 @@ export default function UserForm({
         company: {
           name: user.company.name,
         }
-      } : {
+      });
+    } else if (open) {
+      form.reset({
         name: '',
         username: '',
         email: '',
