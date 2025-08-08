@@ -1,60 +1,35 @@
 'use client';
 
-import { Suspense, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { useSearchParams } from 'next/navigation';
+import { Suspense, useState } from 'react';
 import { Button } from '@/components/ui/shadcn-components/button';
 import UserCard from '@/components/user/UserCard';
-import SearchFilter from '@/components/SearchFilter';
-import SkeletonLoader from '@/components/SkeletonLoader';
-import ErrorCard from '@/components/ErrorCard';
 import UserForm from '@/components/user/UserForm';
+import SkeletonLoader from '@/components/SkeletonLoader';
 import { useLocalUsers } from '@/hooks/useLocalUsers';
 import { User, UserFormValues } from '@/types/user';
-import { applyUsersFilters } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import ErrorCard from '@/components/ErrorCard';
+import SearchFilter from '@/components/SearchFilter';
 
 export default function HomePage() {
-  const searchParams = useSearchParams();
-  const { users, loading, error, addUser, deleteUser } = useLocalUsers();
   const [showModal, setShowModal] = useState(false);
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
-
-  // Инициализация фильтров из URL параметров
-  useEffect(() => {
-    if (users.length > 0) {
-      const searchTerm = searchParams.get('search') || '';
-      const companyName = searchParams.get('company') || '';
-
-      const filtered = applyUsersFilters(users, {
-        searchTerm,
-        companyName: companyName !== 'all' ? companyName : undefined
-      });
-
-      setFilteredUsers(filtered);
-    }
-  }, [users, searchParams]);
+  const { users, loading, error, addUser, deleteUser } = useLocalUsers();
+  const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
 
   const handleAddUser = (formData: UserFormValues) => {
     const newUser: User = {
       ...formData,
       id: generateNewUserId(users),
-      address: {
-        street: '',
-        suite: '',
-        city: '',
-        zipcode: '',
-      },
-      company: {
-        ...formData.company,
-        catchPhrase: '',
-        bs: '',
-      },
+      address: { street: '', suite: '', city: '', zipcode: '' },
+      company: { ...formData.company, catchPhrase: '', bs: '' },
     };
     addUser(newUser);
     setShowModal(false);
   };
 
-  if (error) return <ErrorCard message={error} />;
+  if (error) {
+    return <ErrorCard message={error} />;
+  }
 
   return (
     <motion.div
@@ -66,7 +41,12 @@ export default function HomePage() {
       <h1 className="text-3xl font-bold mb-6 text-gray-800">User Management</h1>
 
       <div className="flex flex-col md:flex-row gap-4 mb-6 items-start md:items-center">
-        <SearchFilter onFilterChange={setFilteredUsers} />
+        <Suspense fallback={<div>Loading search...</div>}>
+          <SearchFilter
+            users={users}
+            onFilterChange={setFilteredUsers}
+          />
+        </Suspense>
         <Button
           onClick={() => setShowModal(true)}
           className="bg-blue-600 hover:bg-blue-700 text-white"
