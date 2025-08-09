@@ -33,7 +33,6 @@ export default function UserDetailPage() {
           return;
         }
 
-        // Сначала проверяем локальных пользователей
         const localUser = users.find(u => u.id === userId);
         if (localUser) {
           setUser(localUser);
@@ -41,7 +40,6 @@ export default function UserDetailPage() {
           return;
         }
 
-        // Если пользователь не найден локально, пробуем загрузить с API
         const apiUser = await fetchUser(userId);
         setUser(apiUser);
       } catch (err) {
@@ -101,10 +99,17 @@ export default function UserDetailPage() {
     >
       <div className="max-w-2xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <Button variant="outline" onClick={() => router.back()}>
+          <Button
+            variant="outline"
+            onClick={() => router.back()}
+            className="border-gray-300 hover:bg-gray-50"
+          >
             Back
           </Button>
-          <Button onClick={() => setIsEditing(true)}>
+          <Button
+            onClick={() => setIsEditing(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
             Edit User
           </Button>
         </div>
