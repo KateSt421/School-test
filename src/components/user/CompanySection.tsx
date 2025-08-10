@@ -1,5 +1,3 @@
-
-// components/user/CompanySection.tsx
 import { User } from '@/types/user';
 
 interface CompanySectionProps {

@@ -6,10 +6,12 @@ import { motion } from 'framer-motion';
 
 interface UserCardProps {
   user: User;
-  onDelete: (id: number) => void;
+  onDelete: (id: number | string) => void;
 }
 
 export default function UserCard({ user, onDelete }: UserCardProps) {
+  const isLocal = Number.isNaN(Number(user.id));
+
   return (
     <motion.div
       whileHover={{ scale: 1.03 }}
@@ -17,12 +19,19 @@ export default function UserCard({ user, onDelete }: UserCardProps) {
       transition={{ type: 'spring', stiffness: 400, damping: 10 }}
     >
       <Card className="hover:shadow-lg transition-shadow bg-gradient-to-br from-white to-gray-50 border-gray-200 rounded-lg">
-        <CardHeader>
-          <CardTitle className="text-gray-800 font-semibold text-lg">{user.name}</CardTitle>
+        <CardHeader className="flex justify-between items-center">
+          <CardTitle className="text-gray-800 font-semibold text-lg">
+            {user.name}
+          </CardTitle>
+          {isLocal && (
+            <span className="text-xs font-medium px-2 py-1 bg-green-100 text-green-800 rounded-full border border-green-200">
+              Local
+            </span>
+          )}
         </CardHeader>
         <CardContent className="space-y-2">
           <p className="text-sm text-gray-600">{user.email}</p>
-          <p className="text-sm text-gray-700 font-medium">{user.company.name}</p>
+          <p className="text-sm text-gray-700 font-medium">{user.company?.name}</p>
         </CardContent>
         <CardFooter className="flex justify-between">
           <Link href={`/user/${user.id}`} passHref>

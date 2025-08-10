@@ -1,4 +1,3 @@
-// components/user/UserForm.tsx
 'use client';
 
 import { useEffect } from 'react';
@@ -6,8 +5,20 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { User, UserFormValues } from '@/types/user';
 import { userSchema } from '@/lib/validations';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/shadcn-components/dialog';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/shadcn-components/form';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/shadcn-components/dialog';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/shadcn-components/form';
 import { Input } from '@/components/ui/shadcn-components/input';
 import { Button } from '@/components/ui/shadcn-components/button';
 
@@ -49,8 +60,8 @@ export default function UserForm({
         phone: user.phone,
         website: user.website || '',
         company: {
-          name: user.company.name,
-        }
+          name: user.company?.name || '',
+        },
       });
     } else if (open) {
       form.reset({
@@ -67,10 +78,13 @@ export default function UserForm({
   }, [open, user, form]);
 
   return (
-    <Dialog open={open} onOpenChange={(open) => {
-      if (!open) form.reset();
-      onOpenChange(open);
-    }}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) form.reset();
+        onOpenChange(isOpen);
+      }}
+    >
       <DialogContent className="sm:max-w-[600px] bg-white rounded-lg">
         <DialogHeader>
           <DialogTitle className="text-gray-800 text-xl font-semibold">

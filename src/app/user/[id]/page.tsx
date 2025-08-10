@@ -1,4 +1,3 @@
-// app/user/[id]/page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -17,7 +16,7 @@ import CompanySection from '@/components/user/CompanySection';
 export default function UserDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const { users, updateUser } = useLocalUsers();
+  const { getUser, updateUser } = useLocalUsers();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,23 +24,31 @@ export default function UserDetailPage() {
 
   useEffect(() => {
     const loadUser = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
-        const userId = parseInt(params.id as string);
-        if (isNaN(userId)) {
-          setError('Invalid user ID');
+        const idStr = String(params?.id);
+        const local = getUser(idStr);
+        if (local) {
+          setUser(local);
           setLoading(false);
           return;
         }
 
-        const localUser = users.find(u => u.id === userId);
-        if (localUser) {
-          setUser(localUser);
+        const idNum = Number(idStr);
+        if (!Number.isNaN(idNum)) {
+          const apiUser = await fetchUser(idNum);
+          if (!apiUser) {
+            setError('User not found');
+          } else {
+            setUser({ ...apiUser, id: String(apiUser.id) });
+          }
           setLoading(false);
           return;
         }
 
-        const apiUser = await fetchUser(userId);
-        setUser(apiUser);
+        setError('User not found');
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load user');
       } finally {
@@ -49,19 +56,21 @@ export default function UserDetailPage() {
       }
     };
 
+    /* eslint-disable react-hooks/exhaustive-deps */
     loadUser();
-  }, [params.id, users]);
+  }, [params?.id]);
 
   const handleUpdate = (formData: UserFormValues) => {
     if (!user) return;
 
-    const updatedUser = {
+    const updatedUser: User = {
       ...user,
       ...formData,
+      id: String(user.id),
       company: {
         ...user.company,
-        name: formData.company.name
-      }
+        name: formData.company?.name || user.company?.name || '',
+      },
     };
 
     updateUser(user.id, updatedUser);

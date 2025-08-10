@@ -17,9 +17,16 @@ export const filterUsersByName = (users: User[], searchTerm: string): User[] => 
   );
 };
 
-export function generateUserId(users: User[]): number {
-  if (users.length === 0) return 1;
-  return Math.max(...users.map(u => u.id)) + 1;
+export function generateUserId(users: User[]): string {
+  if (users.length === 0) return '1';
+
+  const numericIds = users
+    .map(u => Number(u.id))
+    .filter(id => !isNaN(id));
+
+  const maxId = numericIds.length > 0 ? Math.max(...numericIds) : 0;
+
+  return String(maxId + 1);
 }
 
 export function cn(...inputs: ClassValue[]) {
@@ -100,10 +107,16 @@ export const validateEmail = (email: string): boolean => {
  * @param existingUsers Массив существующих пользователей
  * @returns Уникальный отрицательный ID
  */
-export const generateUniqueId = (existingUsers: User[]): number => {
-  if (existingUsers.length === 0) return -1;
-  const minId = Math.min(...existingUsers.map(user => user.id));
-  return minId - 1;
+export const generateUniqueId = (existingUsers: User[]): string => {
+  if (existingUsers.length === 0) return '-1';
+
+  const numericIds = existingUsers
+    .map(user => Number(user.id))
+    .filter(id => !isNaN(id));
+
+  const minId = numericIds.length > 0 ? Math.min(...numericIds) : 0;
+
+  return String(minId - 1);
 };
 
 /**

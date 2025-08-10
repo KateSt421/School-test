@@ -1,10 +1,8 @@
 import { z } from "zod";
 
-// Валидатор для доменного имени (example.com, example.net и т.д.)
 const domainSchema = z.string()
   .refine(value => {
-    if (value === "") return true; // Пустая строка разрешена
-    // Регулярное выражение для проверки доменного имени
+    if (value === "") return true;
     const domainRegex = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/;
     return domainRegex.test(value);
   }, {
@@ -19,7 +17,7 @@ export const userSchema = z.object({
   phone: z.string().min(1, "Phone is required"),
   website: z.union([
     domainSchema,
-    z.string().url("Invalid URL") // Также разрешаем полные URL
+    z.string().url("Invalid URL")
   ]).optional(),
   company: z.object({
     name: z.string().min(1, "Company name is required")

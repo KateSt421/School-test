@@ -1,74 +1,91 @@
-import { useState, useEffect, useCallback } from 'react';
-import { User } from '@/types/user';
-import { fetchUsers } from '@/lib/api';
+'use client';
 
-const LOCAL_STORAGE_KEY = 'users';
+import { useState } from 'react';
+import { User, UserFormValues } from '@/types/user';
+
+const STORAGE_KEY = 'localUsers';
 
 export function useLocalUsers() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const readFromStorage = (): User[] => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      return JSON.parse(raw) as User[];
+    } catch (e) {
+      console.error('useLocalUsers: parse error', e);
+      return [];
+    }
+  };
 
-  // Загрузка данных
-  useEffect(() => {
-    const loadUsers = async () => {
-      try {
-        // Пробуем загрузить из localStorage
-        const savedUsers = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (savedUsers) {
-          setUsers(JSON.parse(savedUsers));
-          setLoading(false);
-          return;
-        }
+  const [users, setUsers] = useState<User[]>(() => readFromStorage());
 
-        // Если в localStorage нет, загружаем с API
-        const fetchedUsers = await fetchUsers();
-        setUsers(fetchedUsers);
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(fetchedUsers));
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load users');
-      } finally {
-        setLoading(false);
+  const saveToStorage = (next: User[]) => {
+    setUsers(next);
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       }
+    } catch (e) {
+      console.error('useLocalUsers: save error', e);
+    }
+  };
+
+  const addUser = (formData: UserFormValues) => {
+    const newUser: User = {
+      id: String(Date.now()),
+      name: formData.name,
+      username: formData.username,
+      email: formData.email,
+      phone: formData.phone,
+      website: formData.website || '',
+      address: {
+        street: '',
+        suite: '',
+        city: '',
+        zipcode: '',
+      },
+      company: {
+        name: formData.company?.name || '',
+        catchPhrase: '',
+        bs: '',
+      },
     };
 
-    loadUsers();
-  }, []);
+    saveToStorage([...users, newUser]);
+    return newUser;
+  };
 
-  // Сохраняем в localStorage при изменении
-  useEffect(() => {
-    if (users.length > 0) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(users));
+  const updateUser = (id: number | string, updatedUser: User) => {
+    const idStr = String(id);
+    const idx = users.findIndex(u => String(u.id) === idStr);
+
+    if (idx === -1) {
+      saveToStorage([...users, { ...updatedUser, id: idStr }]);
+    } else {
+      const next = users.slice();
+      next[idx] = { ...next[idx], ...updatedUser, id: idStr };
+      saveToStorage(next);
     }
-  }, [users]);
-
-  const getLocalUser = useCallback((id: number) => {
-    return users.find(user => user.id === id);
-  }, [users]);
-
-  const addUser = (user: User) => {
-    setUsers(prev => [...prev, user]);
   };
 
-  const updateUser = (id: number, updatedUser: Partial<User>) => {
-    setUsers(prev =>
-      prev.map(user =>
-        user.id === id ? { ...user, ...updatedUser } : user
-      )
-    );
+  const deleteUser = (id: number | string) => {
+    const idStr = String(id);
+    saveToStorage(users.filter(u => String(u.id) !== idStr));
   };
 
-  const deleteUser = (id: number) => {
-    setUsers(prev => prev.filter(user => user.id !== id));
+  const getUser = (id: number | string) => {
+    const idStr = String(id);
+    return users.find(u => String(u.id) === idStr);
   };
 
   return {
     users,
-    loading,
-    error,
-    getLocalUser,
     addUser,
     updateUser,
     deleteUser,
+    getUser,
   };
 }
+
+export default useLocalUsers;

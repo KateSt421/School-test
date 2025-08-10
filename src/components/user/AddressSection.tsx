@@ -1,4 +1,3 @@
-// components/user/AddressSection.tsx
 import { User } from '@/types/user';
 
 interface AddressSectionProps {

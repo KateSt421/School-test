@@ -1,4 +1,3 @@
-// components/user/UserDetailSection.tsx
 import { User } from '@/types/user';
 
 interface UserDetailSectionProps {

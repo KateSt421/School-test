@@ -11,7 +11,6 @@ interface ErrorProps {
 
 export default function Error({ error, reset }: ErrorProps) {
   useEffect(() => {
-    // Логирование ошибки (можно отправить в сервис мониторинга)
     console.error('Error caught by error boundary:', error);
   }, [error]);
 

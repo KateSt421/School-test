@@ -1,4 +1,3 @@
-// lib/api.ts
 import { User } from '@/types/user';
 
 const API_URL = 'https://jsonplaceholder.typicode.com/users';
@@ -13,7 +12,6 @@ export const fetchUser = async (id: number): Promise<User> => {
   try {
     const res = await fetch(`${API_URL}/${id}`, { next: { revalidate: 3600 } });
     if (!res.ok) {
-      // Для локальных пользователей возвращаем пустой объект с id
       return {
         id,
         name: '',
@@ -33,7 +31,6 @@ export const fetchUser = async (id: number): Promise<User> => {
     }
     return res.json();
   } catch {
-    // В случае ошибки возвращаем базовый объект пользователя
     return {
       id,
       name: '',

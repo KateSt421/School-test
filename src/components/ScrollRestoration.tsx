@@ -1,5 +1,3 @@
-
-// components/ScrollRestoration.tsx
 'use client';
 
 import { useScrollRestoration } from '@/hooks/useScrollRestoration';
