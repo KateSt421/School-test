@@ -193,12 +193,13 @@ export default function UserForm({
                   form.reset();
                   onOpenChange(false);
                 }}
+                className="cursor-pointer"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white"
+                className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
               >
                 {buttonText}
               </Button>

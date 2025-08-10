@@ -12,7 +12,7 @@ import ErrorCard from '@/components/ErrorCard';
 import SearchFilterClient from '@/components/SearchFilterClient';
 import { fetchUsers } from '@/lib/api';
 
-const FILTER_IDS_KEY = 'users.filter.ids';
+const FILTER_IDS_KEY = 'users.filter.ids'; // sessionStorage ключ
 
 export default function HomePage() {
   const [showModal, setShowModal] = useState(false);
@@ -119,8 +119,10 @@ export default function HomePage() {
 
   const handleDeleteUser = (id: string | number) => {
     if (localUsers.some(u => String(u.id) === String(id))) {
+      // Удаление только для локальных пользователей
       deleteUser(id);
     } else {
+      // Удаление для API пользователей (удаляем только из состояния)
       setApiUsers(prev => prev.filter(user => String(user.id) !== String(id)));
     }
   };
@@ -141,7 +143,7 @@ export default function HomePage() {
         <SearchFilterClient users={mergedUsers} onFilterChange={handleFilterChange} />
         <Button
           onClick={() => setShowModal(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
+          className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
         >
           Add User
         </Button>
@@ -167,4 +169,3 @@ export default function HomePage() {
     </motion.div>
   );
 }
-

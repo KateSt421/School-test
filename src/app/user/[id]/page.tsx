@@ -111,13 +111,13 @@ export default function UserDetailPage() {
           <Button
             variant="outline"
             onClick={() => router.back()}
-            className="border-gray-300 hover:bg-gray-50"
+            className="border-gray-300 hover:bg-gray-50 cursor-pointer"
           >
             Back
           </Button>
           <Button
             onClick={() => setIsEditing(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
           >
             Edit User
           </Button>

@@ -28,7 +28,7 @@ export default function UserCard({ user, onDelete }: UserCardProps) {
           <Link href={`/user/${user.id}`} passHref>
             <Button
               variant="outline"
-              className="bg-blue-50 text-blue-600 hover:bg-blue-100 border-blue-200"
+              className="bg-blue-50 text-blue-600 hover:bg-blue-100 border-blue-200 cursor-pointer"
               asChild
             >
               <span>Details</span>
@@ -36,8 +36,8 @@ export default function UserCard({ user, onDelete }: UserCardProps) {
           </Link>
           <Button
             variant="destructive"
-            className="bg-red-50 text-red-600 hover:bg-red-100 border-red-200"
-            onClick={() => onDelete(user.id)}
+            className="bg-red-50 text-red-600 hover:bg-red-100 border-red-200 cursor-pointer"
+            onClick={() => onDelete(user.id)}  // Удаляем как локальных, так и API пользователей
           >
             Delete
           </Button>
