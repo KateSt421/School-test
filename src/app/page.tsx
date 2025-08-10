@@ -12,7 +12,7 @@ import ErrorCard from '@/components/ErrorCard';
 import SearchFilterClient from '@/components/SearchFilterClient';
 import { fetchUsers } from '@/lib/api';
 
-const FILTER_IDS_KEY = 'users.filter.ids'; // sessionStorage ключ
+const FILTER_IDS_KEY = 'users.filter.ids';
 
 export default function HomePage() {
   const [showModal, setShowModal] = useState(false);
@@ -117,6 +117,14 @@ export default function HomePage() {
     sessionStorage.removeItem(FILTER_IDS_KEY);
   };
 
+  const handleDeleteUser = (id: string | number) => {
+    if (localUsers.some(u => String(u.id) === String(id))) {
+      deleteUser(id);
+    } else {
+      setApiUsers(prev => prev.filter(user => String(user.id) !== String(id)));
+    }
+  };
+
   if (error) {
     return <ErrorCard message={error} />;
   }
@@ -145,7 +153,7 @@ export default function HomePage() {
             <SkeletonLoader count={5} />
           ) : (
             filteredUsers.map(user => (
-              <UserCard key={user.id} user={user} onDelete={deleteUser} />
+              <UserCard key={user.id} user={user} onDelete={handleDeleteUser} />
             ))
           )}
         </div>
